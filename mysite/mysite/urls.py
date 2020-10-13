@@ -23,7 +23,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
-from member.views import registration_view, UserView, UserUpdateDestroyView
+from member.views import regist_view, UserView, UserUpdateView
 
 
 from rest_framework import routers, permissions
@@ -53,11 +53,10 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     # include()다른 URL 패턴을 포함 할 때는 항상 사용해야 합니다. admin.site.urls이것에 대한 유일한 예외입니다.
-
     path('api/get_token/', views.obtain_auth_token),
-    path('api/register/', registration_view, name="register"),
+    path('api/register/', regist_view),
     path("api/mypage/", UserView.as_view()),
-    path("api/mypage/<int:pk>/", UserUpdateDestroyView.as_view()),
+    path("api/mypage/<int:pk>/", UserUpdateView.as_view()),
     path('api-auth/', include('rest_framework.urls')),
     # path('gallery/', include('gallery.urls')),
 

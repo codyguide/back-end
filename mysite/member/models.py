@@ -3,7 +3,8 @@ from django.urls import reverse
 from django.contrib.auth.models import AbstractBaseUser, UserManager as BaseUserManager
 
 class User(AbstractBaseUser):
-    username = models.CharField(max_length=60, unique=True)
+    userId = models.CharField(max_length=60, unique=True)
+    username = models.CharField(max_length=60, unique=False)
     email = models.EmailField(max_length=20, unique=False, default="email@test.com")
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -12,11 +13,11 @@ class User(AbstractBaseUser):
     phone = models.CharField(max_length=11, null=True, unique=True)
     img_profile = models.FileField(upload_to='user', blank=True)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'userId'
+    REQUIRED_FIELDS = ['username','email']
 
     def __str__(self):
-        return self.username + "," + self.email
+        return self.userId + "," + self.email
 
     def has_perm(self, perm, obj=None):
         return True
@@ -43,13 +44,17 @@ class User(AbstractBaseUser):
             self.type = self.base_type
         return super().save(*args, **kwargs)
 
-    def create_user(self, email, password,  username):
-        if not username:
-            raise ValueError("이름을 입력해 주세요")
-            if not email:
-                raise ValueError("이메일을 입력해 주세요")
+    def create_user(self, email, password,  username, userId):
+        if not userId:
+            raise ValueError("아이디를 입력해 주세요")
+            if not username:
+                raise ValueError("이름을 입력해 주세요")
+                if not email:
+                    raise ValueError("이메일을 입력해 주세요")
+
         user = self.model(
-            username=self.normalize_username(username),
+            userId=self.normalize_userId(userId),
+            username=username,
             password=password,
             email=email,
         )
@@ -58,9 +63,10 @@ class User(AbstractBaseUser):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password, username):
+    def create_superuser(self, email, password, username, userId):
         user = self.create_user(
-            username=self.normalize_username(username),
+            userId=self.normalize_userId(userId),
+            username=username,
             password=password,
             email=email,
         )

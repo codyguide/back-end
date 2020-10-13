@@ -4,13 +4,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authentication import TokenAuthentication
 from .models import User
-from member.serializers import RegistrationSerializer, UserSerializer
+from member.serializers import RegistSerializer, UserSerializer
 
 
 @api_view(['POST', ])
-def registration_view(request):
+def regist_view(request):
     if request.method == 'POST':
-        serializer = RegistrationSerializer(data=request.data)
+        serializer = RegistSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
             user = serializer.save()
@@ -33,7 +33,7 @@ class UserView(generics.ListAPIView):
         return User.objects.filter(id=id)
 
 
-class UserUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class UserUpdateView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
