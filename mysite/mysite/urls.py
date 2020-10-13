@@ -29,8 +29,10 @@ from member.views import registration_view, UserView, UserUpdateDestroyView
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
 from django.conf import settings
 from django.conf.urls.static import static
+
 from rest_framework.authtoken import views
 
 schema_view = get_schema_view(
@@ -47,12 +49,17 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+
+
     path('admin/', admin.site.urls),
+    # include()다른 URL 패턴을 포함 할 때는 항상 사용해야 합니다. admin.site.urls이것에 대한 유일한 예외입니다.
+
     path('api/get_token/', views.obtain_auth_token),
     path('api/register/', registration_view, name="register"),
     path("api/mypage/", UserView.as_view()),
     path("api/mypage/<int:pk>/", UserUpdateDestroyView.as_view()),
     path('api-auth/', include('rest_framework.urls')),
+    # path('gallery/', include('gallery.urls')),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -61,6 +68,10 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
                                              cache_timeout=0), name='schema-redoc'),
 ]
+
+
+# 어떤 URL을 정적으로 추가할래? > MEDIA_URL을 static 파일 경로로 추가
+# 실제 파일은 어디에 있는데? > MEDIA_ROOT 경로내의 파일을 static 파일로 설정
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

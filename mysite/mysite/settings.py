@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'board.apps.BoardConfig',
     'member.apps.MemberConfig',
-    'gallery.apps.GalleryConfig',
+    # 'gallery.apps.GalleryConfig',
     'rest_framework',
     'drf_yasg',
     'rest_framework.authtoken',
@@ -140,8 +140,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
 }
-
+# 이미지 업로드할 경로
 MEDIA_URL = '/media/'
+# 로컬 디렉토리 어디에 저장할 건지
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 GRAPH_MODELS = {
