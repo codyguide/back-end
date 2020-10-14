@@ -15,9 +15,8 @@ def regist_view(request):
         if serializer.is_valid():
             user = serializer.save()
             data['response'] = '회원가입되었습니다.'
-            data['username'] = user.username
-            data['userId'] = user.userId
             data['email'] = user.email
+            data['username'] = user.username
         else:
             data = serializer.errors
         return Response(data)

@@ -9,10 +9,8 @@ class RegistSerializer(serializers.ModelSerializer):
 
     def save(self):
         user = User(
-            username=self.data['username'],
-            userId=self.data['userId'],
             email=self.data['email'],
-
+            username=self.data['username'],
         )
         password = self.data['password']
         user.set_password(password)

@@ -3,21 +3,19 @@ from django.urls import reverse
 from django.contrib.auth.models import AbstractBaseUser, UserManager as BaseUserManager
 
 class User(AbstractBaseUser):
-    userId = models.CharField(max_length=60, unique=True)
+    email = models.EmailField(max_length=60, unique=True, default="email@test.com")
     username = models.CharField(max_length=60, unique=False)
-    email = models.EmailField(max_length=20, unique=False, default="email@test.com")
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    phone = models.CharField(max_length=11, null=True, unique=True)
     img_profile = models.FileField(upload_to='user', blank=True)
 
-    USERNAME_FIELD = 'userId'
-    REQUIRED_FIELDS = ['username','email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return self.userId + "," + self.email
+        return self.email + "," + self.username
 
     def has_perm(self, perm, obj=None):
         return True
@@ -44,31 +42,27 @@ class User(AbstractBaseUser):
             self.type = self.base_type
         return super().save(*args, **kwargs)
 
-    def create_user(self, email, password,  username, userId):
-        if not userId:
-            raise ValueError("아이디를 입력해 주세요")
+    def create_user(self, email, password,  username):    
+        if not email:
+            raise ValueError("이메일을 입력해 주세요")
             if not username:
                 raise ValueError("이름을 입력해 주세요")
-                if not email:
-                    raise ValueError("이메일을 입력해 주세요")
 
         user = self.model(
-            userId=self.normalize_userId(userId),
-            username=username,
+            email=self.normalize_email(email),
             password=password,
-            email=email,
+            username=username,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password, username, userId):
+    def create_superuser(self, email, password, username):
         user = self.create_user(
-            userId=self.normalize_userId(userId),
-            username=username,
+            email=self.normalize_email(email),
             password=password,
-            email=email,
+            username=username,
         )
         user.is_admin = True
         user.is_staff = True
@@ -86,7 +80,6 @@ class PersonManager(BaseUserManager):
 class AdminUserManager(BaseUserManager):
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(type=User.Types.ADMINUSER)
-
 
 
 
