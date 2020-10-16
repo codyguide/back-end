@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'board.apps.BoardConfig',
     'member.apps.MemberConfig',
+    'photo.apps.PhotoConfig',
+
     # 'gallery.apps.GalleryConfig',
     'rest_framework',
     'drf_yasg',
