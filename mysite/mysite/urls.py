@@ -20,11 +20,13 @@ Including another URLconf
 #     path('admin/', admin.site.urls),
 # ]
 
+from django.views.generic import ListView, DetailView
+from photo.models import Album, Photo
+
 from django.contrib import admin
 from django.urls import path, include, re_path
 
 from member.views import regist_view, UserView, UserUpdateView
-
 
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
@@ -56,9 +58,16 @@ urlpatterns = [
     path('api/get_token/', views.obtain_auth_token),
     path('api/register/', regist_view, name="register"),
     path("api/mypage/", UserView.as_view()),
+
+    path('api/photo/', include('photo.urls')),
+
     path("api/mypage/<int:pk>/", UserUpdateView.as_view()),
     path('api-auth/', include('rest_framework.urls')),
-    # path('gallery/', include('gallery.urls')),
+    # path('api/photo/', ListView.as_view(model=Album), name='index'),
+
+
+
+
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -66,7 +75,8 @@ urlpatterns = [
                                                cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
                                              cache_timeout=0), name='schema-redoc'),
-]
+] + static(settings.MEDIA_URL,
+           document_root=settings.MEDIA_ROOT)
 
 
 # 어떤 URL을 정적으로 추가할래? > MEDIA_URL을 static 파일 경로로 추가
