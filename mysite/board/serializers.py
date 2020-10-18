@@ -22,9 +22,10 @@ class BoardSerializer(serializers.ModelSerializer):
             'views',
             'comments',
         ]
-    
+
     def get_comments(self, board):
         return Comment.objects.filter(board=board).count()
+
 
 class CommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(

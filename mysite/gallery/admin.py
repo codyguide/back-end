@@ -1,3 +1,9 @@
 from django.contrib import admin
+from gallery.models import Gallery
 
-# Register your models here.
+
+class GalleryAdmin(admin.ModelAdmin):
+    readonly_fields = ('views',)
+
+
+admin.site.register(Gallery, GalleryAdmin)

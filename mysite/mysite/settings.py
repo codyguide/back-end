@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'board.apps.BoardConfig',
     'member.apps.MemberConfig',
     'photo.apps.PhotoConfig',
-
-    # 'gallery.apps.GalleryConfig',
+    'gallery.apps.GalleryConfig',
     'rest_framework',
     'drf_yasg',
     'rest_framework.authtoken',

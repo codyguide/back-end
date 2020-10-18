@@ -23,6 +23,7 @@ Including another URLconf
 from django.views.generic import ListView, DetailView
 # from photo.models import Album, Photo
 from board.views import BoardList, BoardDestroy, CommentList, Category
+from gallery.views import GalleryList, GalleryDestroy
 
 from django.contrib import admin
 from django.urls import path, include, re_path
@@ -62,11 +63,14 @@ urlpatterns = [
     path('api/photo/', include('photo.urls')),
     path("api/mypage/<int:pk>/", UserUpdateView.as_view()),
     path('api-auth/', include('rest_framework.urls')),
-    path("api/board/", BoardList.as_view()), 
+    path("api/board/", BoardList.as_view()),
     path("api/board/<int:pk>/", BoardDestroy.as_view()),
     path("api/board/<category>/", Category.as_view()),
     path("api/board/<int:pk>/comment/", CommentList.as_view()),
+    path("api/gallery/", GalleryList.as_view()),
+    path("api/gallery/<int:pk>/", GalleryDestroy.as_view()),
     # path("api/board", include('board.urls')),
+    # path("api/gallery", include('gallery.urls')),
     # path('api/photo/', ListView.as_view(model=Album), name='index'),
 
 
