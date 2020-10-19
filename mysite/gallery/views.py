@@ -37,6 +37,8 @@ class GalleryList(generics.ListCreateAPIView):
 class GalleryDestroy(generics.RetrieveDestroyAPIView):
     queryset = Gallery.objects.all()
     serializer_class = GallerySerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self, **kwargs):
         queryset = Gallery.objects.filter(pk=self.kwargs['pk'])
@@ -45,9 +47,9 @@ class GalleryDestroy(generics.RetrieveDestroyAPIView):
         return queryset
 
     def delete(self, request, *args, **kwargs):
-        board = board.objects.filter(
+        gallery = Gallery.objects.filter(
             pk=self.kwargs['pk'], user=self.request.user)
-        if board.exists():
+        if gallery.exists():
             return self.destroy(request, *args, **kwargs)
         else:
             raise ValidationError("ERROR")

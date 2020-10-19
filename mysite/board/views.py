@@ -55,6 +55,20 @@ class BoardDestroy(generics.RetrieveDestroyAPIView):
             raise ValidationError("ERROR")
 
 
+class BoardUpdate(generics.UpdateAPIView):
+    
+    serializer_class = BoardSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    parser_class = (FileUploadParser,)
+
+    def get_queryset(self, **kwargs):
+        print(self.kwargs['pk'])
+        queryset = Board.objects.filter(pk=self.kwargs['pk'])
+        return queryset
+
+
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
