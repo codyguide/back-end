@@ -37,6 +37,8 @@ class BoardList(generics.ListCreateAPIView):
 class BoardDestroy(generics.RetrieveDestroyAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self, **kwargs):
         queryset = Board.objects.filter(pk=self.kwargs['pk'])
@@ -45,7 +47,7 @@ class BoardDestroy(generics.RetrieveDestroyAPIView):
         return queryset
 
     def delete(self, request, *args, **kwargs):
-        board = board.objects.filter(
+        board = Board.objects.filter(
             pk=self.kwargs['pk'], user=self.request.user)
         if board.exists():
             return self.destroy(request, *args, **kwargs)
