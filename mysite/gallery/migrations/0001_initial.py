@@ -16,13 +16,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Gallery',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=50)),
                 ('content', models.CharField(max_length=500)),
-                ('img_path', models.FileField(blank=True, max_length=200, null=True, upload_to='')),
+                ('img_path', models.FileField(max_length=200, upload_to='')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('views', models.IntegerField(default=0)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='member.person')),
+                ('user', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='member.person')),
             ],
             options={
                 'db_table': 'gallery',
